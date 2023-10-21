@@ -4,7 +4,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import NavBar from './NavBar'
-import { Theme, ThemePanel } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 
@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={inter.variable}>
-                <Theme appearance="light" accentColor="violet">
+                <Theme accentColor="violet">
                     <NavBar />
                     <main className=" p-5">{children}</main>
                 </Theme>
