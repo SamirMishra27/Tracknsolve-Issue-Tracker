@@ -1,6 +1,7 @@
-import { notFound } from 'next/navigation'
-import prisma from '@/prisma/client'
 import { Heading, Text, Flex, Card } from '@radix-ui/themes'
+import { notFound } from 'next/navigation'
+
+import prisma from '@/prisma/client'
 import IssueStatusBadge from '@/app/components/IssueStatusBadge'
 import ReactMarkdown from 'react-markdown'
 
