@@ -35,8 +35,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         try {
             setSubmitting(true)
 
-            const response = await fetch('/api/issues', { body: JSON.stringify(data), method: 'POST' })
-            if (!response.ok) throw new Error()
+            if (issue) {
+                await fetch(`/api/issues/${issue.id}`, { body: JSON.stringify(data), method: 'PATCH' })
+            } else {
+                const response = await fetch('/api/issues', { body: JSON.stringify(data), method: 'POST' })
+                if (!response.ok) throw new Error()
+            }
 
             router.push('/issues')
         } catch (error) {
@@ -64,7 +68,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                     render={({ field }) => <SimpleMDE placeholder=" Description of the issue..." {...field} />}
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                <Button disabled={isSubmitting}>Submit New Issue {isSubmitting && <Spinner />}</Button>
+                <Button disabled={isSubmitting}>
+                    {issue ? 'Update Issue' : 'Submit New Issue'} {isSubmitting && <Spinner />}
+                </Button>
             </form>
         </div>
     )
