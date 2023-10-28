@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 
 import classNames from 'classnames'
 import { VscDebugAlt } from 'react-icons/vsc'
-import { Box, Container, Flex } from '@radix-ui/themes'
+import { Avatar, Box, Container, DropdownMenu, Flex, Text } from '@radix-ui/themes'
 
 const NavBar = () => {
     const currentPath = usePathname()
@@ -43,8 +43,28 @@ const NavBar = () => {
                     </Flex>
                     <Flex>
                         <Box>
-                            {status === 'authenticated' && <Link href="/api/auth/signin">Log out</Link>}
-                            {status === 'unauthenticated' && <Link href="/api/auth/signout">Login</Link>}
+                            {status === 'authenticated' && (
+                                <DropdownMenu.Root>
+                                    <DropdownMenu.Trigger>
+                                        <Avatar
+                                            src={session.user!.image!}
+                                            fallback="?"
+                                            radius="full"
+                                            className=" cursor-pointer"
+                                            data-side="right"
+                                        />
+                                    </DropdownMenu.Trigger>
+                                    <DropdownMenu.Content>
+                                        <DropdownMenu.Label>
+                                            <Text size="2">{session.user!.email}</Text>
+                                        </DropdownMenu.Label>
+                                        <DropdownMenu.Item>
+                                            <Link href="/api/auth/signout">Log out</Link>
+                                        </DropdownMenu.Item>
+                                    </DropdownMenu.Content>
+                                </DropdownMenu.Root>
+                            )}
+                            {status === 'unauthenticated' && <Link href="/api/auth/signin">Login</Link>}
                         </Box>
                     </Flex>
                 </Flex>
