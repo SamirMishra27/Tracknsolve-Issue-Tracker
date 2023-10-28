@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 
 import classNames from 'classnames'
 import { VscDebugAlt } from 'react-icons/vsc'
-import { Box } from '@radix-ui/themes'
+import { Box, Container, Flex } from '@radix-ui/themes'
 
 const NavBar = () => {
     const currentPath = usePathname()
@@ -18,29 +18,37 @@ const NavBar = () => {
     ]
 
     return (
-        <nav className=" flex space-x-6 border-b mb-5 px-5 h-14 items-center">
-            <Link href="/">
-                <VscDebugAlt />
-            </Link>
-            <ul className=" flex space-x-6">
-                {links.map((link) => (
-                    <li key={link.href}>
-                        <Link
-                            className={classNames({
-                                ' text-zinc-900': link.href === currentPath,
-                                'text-zinc-500': link.href !== currentPath,
-                                'hover:text-zinc-800 transition-colors': true
-                            })}
-                            href={link.href}>
-                            {link.label}
+        <nav className=" border-b mb-5 px-5 py-5">
+            <Container>
+                <Flex justify="between">
+                    <Flex align="center" gap="3">
+                        <Link href="/">
+                            <VscDebugAlt />
                         </Link>
-                    </li>
-                ))}
-            </ul>
-            <Box>
-                {status === 'authenticated' && <Link href="/api/auth/signin">Log out</Link>}
-                {status === 'unauthenticated' && <Link href="/api/auth/signout">Login</Link>}
-            </Box>
+                        <ul className=" flex space-x-6">
+                            {links.map((link) => (
+                                <li key={link.href}>
+                                    <Link
+                                        className={classNames({
+                                            ' text-zinc-900': link.href === currentPath,
+                                            'text-zinc-500': link.href !== currentPath,
+                                            'hover:text-zinc-800 transition-colors': true
+                                        })}
+                                        href={link.href}>
+                                        {link.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </Flex>
+                    <Flex>
+                        <Box>
+                            {status === 'authenticated' && <Link href="/api/auth/signin">Log out</Link>}
+                            {status === 'unauthenticated' && <Link href="/api/auth/signout">Login</Link>}
+                        </Box>
+                    </Flex>
+                </Flex>
+            </Container>
         </nav>
     )
 }
