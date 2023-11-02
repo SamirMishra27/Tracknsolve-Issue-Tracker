@@ -1,11 +1,13 @@
+import { cache } from 'react'
 import { Grid, Box, Flex } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
 
 import prisma from '@/prisma/client'
+import { getServerSession } from 'next-auth'
+
 import EditIssueButton from './EditIssueButton'
 import IssueDetails from './IssueDetails'
 import DeleteIssueButton from './DeleteIssueButton'
-import { getServerSession } from 'next-auth'
 import authOptions from '@/app/auth/authOptions'
 import AssigneeSelect from './AssigneeSelect'
 
@@ -13,12 +15,14 @@ interface Props {
     params: { id: string }
 }
 
-const page = async ({ params }: Props) => {
+const fetchIssue = cache((issueId: number) => {
+    return prisma.issue.findUnique({ where: { id: issueId } })
+})
+
+const IssueDetailPage = async ({ params }: Props) => {
     const session = await getServerSession(authOptions)
 
-    const issue = await prisma.issue.findUnique({
-        where: { id: parseInt(params.id) }
-    })
+    const issue = await fetchIssue(parseInt(params.id))
 
     if (!issue) notFound()
 
@@ -41,9 +45,7 @@ const page = async ({ params }: Props) => {
 }
 
 export async function generateMetadata({ params }: Props) {
-    const issue = await prisma.issue.findUnique({
-        where: { id: parseInt(params.id) }
-    })
+    const issue = await fetchIssue(parseInt(params.id))
 
     return {
         title: issue?.title,
@@ -51,4 +53,4 @@ export async function generateMetadata({ params }: Props) {
     }
 }
 
-export default page
+export default IssueDetailPage
