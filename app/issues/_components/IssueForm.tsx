@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, TextField, Callout } from '@radix-ui/themes'
+import { Button, TextField, Callout, Flex } from '@radix-ui/themes'
 import { Controller, useForm } from 'react-hook-form'
 
 import { z } from 'zod'
@@ -67,9 +67,14 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
                     render={({ field }) => <SimpleMDE placeholder=" Description of the issue..." {...field} />}
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                <Button disabled={isSubmitting}>
-                    {issue ? 'Update Issue' : 'Submit New Issue'} {isSubmitting && <Spinner />}
-                </Button>
+                <Flex gap="2">
+                    <Button disabled={isSubmitting}>
+                        {issue ? 'Update Issue' : 'Submit New Issue'} {isSubmitting && <Spinner />}
+                    </Button>
+                    <Button color="red" type="reset" onClick={() => router.push(`/issues/${issue?.id}`)}>
+                        Cancel
+                    </Button>
+                </Flex>
             </form>
         </div>
     )
